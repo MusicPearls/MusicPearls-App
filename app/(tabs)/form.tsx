@@ -1,30 +1,36 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { REACT_APP_API_BASE_URL, REACT_APP_LOCAL_API_BASE_URL } from '@env';
+const localData: BackData = require('../../assets/data/forms.json');
 
 export default function FormIndex() {
-  return (
-    <View style={styles.container}>
-    {renderHeader()}
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={item => item.name}
-    />
-  </View>
-  );
+
+    const [backData, setBackData] = useState<BackData>(localData);
+    useEffect(() => {  
+      setBackData(localData)
+    }, []);
+
+    return (
+        <View style={styles.container}>
+        {renderHeader()}
+        <FlatList
+        data={backData.forms}
+        renderItem={renderItem}
+        keyExtractor={item => item.formName}
+        />
+    </View>
+    );
 }
 
 // Define the type for the data items
-interface DataItem {
-    name: string;
+interface BackData {
+    forms: Form[];
   }
-
-// Example data
-const data: DataItem[] = [
-    {name: 'Symphony'},
-    {name: 'Piano Concerto'},
-    {name: 'Piano Sonata'},
-  ];
+interface Form{
+    formName: string;
+    description: string;
+}
   
   // Render header component
   const renderHeader = () => (
@@ -34,10 +40,10 @@ const data: DataItem[] = [
   );
   
   // Render each row
-  const renderItem = ({ item }: { item: DataItem }) => (
+  const renderItem = ({ item }: { item: Form }) => (
     <View style={styles.row}>
-        <Link href={`/form/${item.name}`} style={styles.cell}>
-        <Text style={styles.cellText}>{item.name}</Text>
+        <Link href={`/form/${item.formName}`} style={styles.cell}>
+        <Text style={styles.cellTextName}>{item.formName}</Text>
         </Link>
     </View>
     );
@@ -50,8 +56,8 @@ const data: DataItem[] = [
       flexDirection: 'row',
       backgroundColor: '#f0f0f0',
       paddingVertical: 8,
-      paddingHorizontal: 16,
-      borderBottomWidth: 1,
+      paddingHorizontal: 8,
+      borderBottomWidth: 4,
       borderBottomColor: '#ddd',
     },
     headerText: {
@@ -61,18 +67,26 @@ const data: DataItem[] = [
     },
     row: {
       flexDirection: 'row',
-      borderBottomWidth: 1,
+      borderBottomWidth: 2,
       borderBottomColor: '#ddd',
     },
     cell: {
       flex: 1,
       paddingVertical: 8,
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    cellText: {
+    cellBirth: {
+        flex: 1,
+        paddingVertical: 8,
+        paddingHorizontal: 8
+      },
+    cellTextName: {
       textAlign: 'center',
       color: 'blue',
     },
+    cellTextBirth: {
+        textAlign: 'left',
+      },
   });

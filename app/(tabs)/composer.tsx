@@ -1,31 +1,36 @@
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+const localData: BackData = require('../../assets/data/composers.json');
 
 export default function ComposerIndex() {
-  return (
-    <View style={styles.container}>
-    {renderHeader()}
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={item => item.name}
-    />
-  </View>
-  );
+
+    const [backData, setBackData] = useState<BackData>(localData);
+    useEffect(() => {  
+      setBackData(localData)
+    }, []);
+
+    return (
+        <View style={styles.container}>
+        {renderHeader()}
+        <FlatList
+        data={backData.composers}
+        renderItem={renderItem}
+        keyExtractor={item => item.name}
+        />
+    </View>
+    );
 }
 
 // Define the type for the data items
-interface DataItem {
-    name: string;
-    birthyear: number;
+interface BackData {
+    composers: Composer[];
   }
-
-// Example data
-const data: DataItem[] = [
-    {name: 'Beethoven', birthyear: 1770 },
-    {name: 'Mozart', birthyear: 1756 },
-    {name: 'Bach', birthyear: 1685 },
-  ];
+interface Composer{
+    name: string;
+    id: string;
+    birthyear: number;
+}
   
   // Render header component
   const renderHeader = () => (
@@ -36,12 +41,12 @@ const data: DataItem[] = [
   );
   
   // Render each row
-  const renderItem = ({ item }: { item: DataItem }) => (
+  const renderItem = ({ item }: { item: Composer }) => (
     <View style={styles.row}>
         <Link href={`/composer/${item.name}`} style={styles.cell}>
-        <Text style={styles.cellText}>{item.name}</Text>
+        <Text style={styles.cellTextName}>{item.name}</Text>
         </Link>
-        <Text style={styles.cellText}>{item.birthyear}</Text>
+        <Text style={styles.cellTextBirth}>{item.birthyear}</Text>
     </View>
     );
     
@@ -53,8 +58,8 @@ const data: DataItem[] = [
       flexDirection: 'row',
       backgroundColor: '#f0f0f0',
       paddingVertical: 8,
-      paddingHorizontal: 16,
-      borderBottomWidth: 1,
+      paddingHorizontal: 8,
+      borderBottomWidth: 4,
       borderBottomColor: '#ddd',
     },
     headerText: {
@@ -64,18 +69,26 @@ const data: DataItem[] = [
     },
     row: {
       flexDirection: 'row',
-      borderBottomWidth: 1,
+      borderBottomWidth: 2,
       borderBottomColor: '#ddd',
     },
     cell: {
       flex: 1,
       paddingVertical: 8,
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    cellText: {
+    cellBirth: {
+        flex: 1,
+        paddingVertical: 8,
+        paddingHorizontal: 8
+      },
+    cellTextName: {
       textAlign: 'center',
       color: 'blue',
     },
+    cellTextBirth: {
+        textAlign: 'left',
+      },
   });

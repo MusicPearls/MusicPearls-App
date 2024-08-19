@@ -37,8 +37,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="composer/[name]"
         options={{
-          href: null,
-        }}
+          title: 'In Progress',
+          href: null         
+       }}
       />
       <Tabs.Screen
         name="form/[name]"
