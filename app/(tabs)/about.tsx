@@ -28,7 +28,6 @@ const AboutScreen = () => {
           </Text>
         </View>
       </View>
-
       <View style={styles.section}>
         <Text style={styles.heading}>Methodology</Text>
         <Text style={styles.paragraph}>
